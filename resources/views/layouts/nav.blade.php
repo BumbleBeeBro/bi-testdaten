@@ -34,12 +34,12 @@
                     </a>
                 </li>
                 <!-- Clipboard -->
-                @if(Request::url() === Request::root() . '/picks')
+                @if(Request::url() === Request::root() . '/results/show')
                 <li class="active">
                 @else
                 <li>
                 @endif
-                    <a href="/picks">
+                    <a href="/results/show">
                         Ergebnisse
                         <span class="sr-only">
                             (current)
@@ -60,7 +60,7 @@
                     </a>
                 </li> --}}
                 <!-- Impressum -->
-                @if(Request::url() === Request::root() . '/inmprint')
+                @if(Request::url() === Request::root() . '/imprint')
                 <li class="active">
                 @else
                 <li>

@@ -26,3 +26,10 @@ body {
 .bg-white {
     background-color:rgb(255, 255, 255)
 }
+
+.keep_footer {
+    min-height: 70%;
+    min-height: -webkit-calc(100% - 95px);
+    min-height: -moz-calc(100% - 95px);
+    min-height: calc(100% - 95px);
+}

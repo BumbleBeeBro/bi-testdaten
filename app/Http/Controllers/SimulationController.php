@@ -30,7 +30,7 @@ class SimulationController extends Controller
             's_amount' => 'required|integer',
             'm_amount' => 'required|min:'.$request->s_amount.'|integer',
             't_min_date' => 'required|max:'.$request->t_max_date.'|date',
-            't_max_date' => 'required|min:'.$request->t_min_date.'|date|after:t_min_date'
+            't_max_date' => 'required|date|after:t_min_date'
 
             ]);
 

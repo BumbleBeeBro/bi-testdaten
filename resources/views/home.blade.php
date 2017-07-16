@@ -5,11 +5,36 @@
     <div class="row">
         <div class="col-md-12">
             <h2>
-                Please Fix
+                Generierungstool für BI-Testdaten
             </h2>
-            <p> 
-                Maximale Ausführungszeit 5min. Änderbar in /etc/php5/apache2/php.ini (max_execution_time)
-            </p>
+            <hr />
+            <div class="form-group">
+                <p> 
+                    Mit diesem Tool können zufällige BI-Testdaten generiert werden. 
+                </p>
+                <p> 
+                    Außerdem kann hier ein Beispieltext stehen. 
+                </p>
+            </div>
+            <div class="form-group">
+                <p> 
+                    Einige Attribute (kursiv) können auch mit eigenen Werten befüllt werden. Dazu muss zunächst das Feld <strong>"Benutzerspezifische Werte verwenden."</strong> ausgwählt werden. Durch Entfernen des Hakens bei bestimmten Attributen können anschließend benutzerspezifische Werte eingetragen und verwendet werden. 
+                </p>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="custom_check" id="c_check" type="checkbox"/>
+                        <b>Benutzerspezifische Werte verwenden.</b>
+                </label>
+            </div>
+            <div class="alert alert-warning">
+                <p> 
+                    <strong>Maximale Ausführungszeit 5 Min.</strong> Änderbar in /etc/php5/apache2/php.ini (max_execution_time)
+                </p>
+                <p> 
+                    Die Felder <strong>"Startdatum"</strong> und <strong>"Enddatum"</strong> sind nicht mit Mozilla Firefox kompatibel. Stattdessen müssen die Daten manuell im Format <strong>"jjjj-mm-tt"</strong> eingegegeben werden.
+                </p>
+            </div>
             <hr/>
         </div>
     </div>
@@ -22,8 +47,11 @@
 <script>
     function show(id) { 
     if(document.getElementById) { 
-        var mydiv = document.getElementById(id); 
-        mydiv.style.display = (mydiv.style.display=='block'?'none':'block'); 
+        var mydiv = document.getElementById(id);
+        var c_check = document.getElementById('c_check');
+        if(c_check.checked){ 
+            mydiv.style.display = (mydiv.style.display=='block'?'none':'block'); 
+        }    
     } 
 }
 </script>
@@ -83,7 +111,13 @@
                         Geburtsdatum
                     </label>
                 </div>
+
+
+
                 <hr/>
+
+
+
                 <h3>
                     Store
                 </h3>
@@ -118,7 +152,13 @@
                         Website
                     </label>
                 </div>
+
+
+
                 <hr/>
+
+
+
             </div>
             <!--Mitarbeiter-->
             <div class="col-sm-6 col-md-4">
@@ -143,9 +183,15 @@
                         Vorname
                     </label>
                 </div>
+
+
+
                 <hr/>
+
+
+
                 <h3>
-                    Produkt
+                    Produkte
                 </h3>
                 <div class="form-group">
                     <label for="Anzahl">
@@ -155,8 +201,8 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="p_name" onchange="javascript:show('produktnamen'); return false" type="checkbox"/>
-                        Name
+                        <input checked="" name="p_name" onchange="javascript:show('produktnamen'); return false" type="checkbox"/>
+                        <i>Name</i>
                     </label>
                 </div>
                 <div class="form-group" id="produktnamen" style="display: none">
@@ -168,8 +214,8 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="p_price" onchange="javascript:show('preis'); return false" type="checkbox"/>
-                        Preis
+                        <input checked="" name="p_price" onchange="javascript:show('preis'); return false" type="checkbox"/>
+                        <i>Preis</i>
                     </label>
                 </div>
                 <div id="preis" style="display: none">
@@ -188,14 +234,14 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="p_producer" type="checkbox"/>
+                        <input checked="" name="p_producer" type="checkbox"/>
                         Hersteller
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="p_description" onchange="javascript:show('beschreibung'); return false" type="checkbox"/>
-                        Beschreibung
+                        <input checked="" name="p_description" onchange="javascript:show('beschreibung'); return false" type="checkbox"/>
+                        <i>Beschreibung</i>
                     </label>
                 </div>
                 <div class="form-group" id="beschreibung" style="display: none">
@@ -207,8 +253,8 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input name="p_tax" onchange="javascript:show('steuer'); return false" type="checkbox"/>
-                        Steuersatz
+                        <input checked="" name="p_tax" onchange="javascript:show('steuer'); return false" type="checkbox"/>
+                        <i>Steuersatz</i>
                     </label>
                 </div>
                 <div class="form-group" id="steuer" style="display: none">
@@ -218,8 +264,14 @@
                     <textarea class="form-control" cols="20" name="p_name_custom" rows="4">
                     </textarea>
                 </div>
+
+
+
                 <hr/>
             </div>
+
+
+
             <div class="col-sm-6 col-md-4">
                 <h3>
                     Hersteller
@@ -249,6 +301,13 @@
                     </label>
                 </div>
                 {{-- Transaktionsdaten --}}
+                
+
+
+                <hr/>
+
+
+
                 <h3>
                     Transaktionsdaten
                 </h3>
@@ -273,30 +332,33 @@
                 <div class="checkbox">
                     <label>
                         <input checked="" name="t_number" type="checkbox"/>
-                        Mehrere Produkte pro Position
+                        <b>Mehrere Produkte pro Position</b>
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
                         <input checked="" name="t_net_price" type="checkbox"/>
-                        Nettopreis pro Position berechnen
+                        <b>Nettopreis pro Position berechnen</b>
                     </label>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="Anzahl">
-                        Startjahr:
+                        Startdatum:
                     </label>
                     <input class="form-control" name="t_min_date" value="2007-01-01" required type="date"/>
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="Anzahl">
-                        Endjahr:
+                        Enddatum:
                     </label>
                     <input class="form-control" name="t_max_date" value=2017-01-01 required type="date"/>
                 </div>
                 <hr/>
             </div>
         </div>
+
+
+
         <!-- row -->
         <div class="row">
             <div class="col-md-12">

@@ -2,8 +2,9 @@
 
 @section('content')
 <h2>
-    Ergebnisse
+   Ergebnisse
 </h2>
+
 <hr/>
 @endsection
 
@@ -12,8 +13,8 @@
     <div class="row">
         @foreach($results as $result)
         <form action="/{{$result}}" class="form-horizontal col-md-6" method="GET">
-            <input class="btn btn-info col-xs-3" id="{{$result}}" type="submit" value="download"/>
-            <div class="input-group col-xs-9">
+            <input class="btn btn-info col-sm-3" id="{{$result}}" type="submit" value="download"/>
+            <div class="input-group col-sm-9">
                 <label for="{{$result}}">
                     Ergebnis {{$result}}
                 </label>
@@ -27,7 +28,7 @@
             {{ csrf_field() }}
             <div class="input-group">
                 <label for="delete">
-                    Lösche alle ergebnisse
+                    Lösche alle Ergebnisse
                 </label>
                 <input class="btn btn-danger btn-block col-xs-12" id="delete" type="submit" value="delete"/>
             </div>

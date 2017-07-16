@@ -23,9 +23,9 @@
             <div class="row">
                 @include('layouts/nav')
             </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-10 col-lg-offset-1">
-                    <div class="panel panel-transparent">
+            <div class="row keep_footer">
+                <div class="col-md-12 col-lg-10 col-lg-offset-1 ">
+                    <div class="panel panel-transparent ">
                         @yield('content')
 
                         @yield('form')
