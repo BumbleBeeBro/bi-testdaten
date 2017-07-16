@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Hersteller extends Model
 {
 	//Erstellbare Attribute.   
-    protected $fillable = ['name', 'email', 'adress'];
+    protected $fillable = ['name', 'email', 'address'];
 
     public function generate($producer_input){
 
@@ -18,8 +18,8 @@ class Hersteller extends Model
 			$this->name = $faker->word;
 		}
 
-		if ($producer_input['h_adress']) {
-			$this->adress = $faker->address;
+		if ($producer_input['h_address']) {
+			$this->address = $faker->address;
 		}
 
 		if ($producer_input['h_email']) {
@@ -29,7 +29,7 @@ class Hersteller extends Model
 		//in DB speichern.
 		$this->save();
 
-		return 	'Hersteller: ' . $this->id . ' erstellt';
+		return 	' Hersteller: ' . $this->id . ' erstellt';
 
 	}
 }

@@ -53,12 +53,8 @@ class Mitarbeiter extends Model
     	return $this->transactions()->count();
     }
 
-
     public function transactions() {
 
-    	return $this->hasMany('\App\Transaktion', 'mitarbeiter_id')->get();
-    	//return Transaktion::where('mitarbeiter_id', $this->id)->get();
-
-
+    	return $this->hasMany('\App\Transaktionskopf', 'mitarbeiter_id')->get();
     }
 }

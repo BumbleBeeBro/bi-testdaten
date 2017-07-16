@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kunde extends Model
 {
 	//Erstellbare Attribute.
-	protected $fillable = ['name', 'firstName', 'adress', 'email', 'phoneNumber', 'birthDate'];
+	protected $fillable = ['name', 'firstName', 'address', 'email', 'phoneNumber', 'birthDate'];
 
 	/** 
 	 * @param  Array der zu erstellenden Attribute.
@@ -30,8 +30,8 @@ class Kunde extends Model
 			$this->firstName = $faker->firstName(null);
 		}
 
-		if ($customer_input['k_adress']) {
-			$this->adress = $faker->address;
+		if ($customer_input['k_address']) {
+			$this->address = $faker->address;
 		}
 
 		if ($customer_input['k_email']) {
@@ -49,7 +49,7 @@ class Kunde extends Model
 		//in DB speichern.
 		$this->save();
 
-		return ' Kunde: ' . $this->id . ' created';
+		return '		Kunde: ' . $this->id . ' erstellt';
     }
 	
 }

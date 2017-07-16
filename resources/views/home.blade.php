@@ -21,12 +21,15 @@
                     Einige Attribute (kursiv) können auch mit eigenen Werten befüllt werden. Dazu muss zunächst das Feld <strong>"Benutzerspezifische Werte verwenden."</strong> ausgwählt werden. Durch Entfernen des Hakens bei bestimmten Attributen können anschließend benutzerspezifische Werte eingetragen und verwendet werden. 
                 </p>
             </div>
-            <div class="checkbox">
+  <!--          <div class="checkbox">
                 <label>
-                    <input name="custom_check" id="c_check" type="checkbox"/>
-                        <b>Benutzerspezifische Werte verwenden.</b>
+                    <input name="check_faultyData" type="checkbox"/>
+                        <b>Fehlerhafte Daten integrieren. Angabe in Prozent (%). </b>
                 </label>
-            </div>
+                <div class="form-group">
+                    <input class="form-control" name="prob_faultyData" type="number"/>
+                </div>
+            </div>-->
             <div class="alert alert-warning">
                 <p> 
                     <strong>Maximale Ausführungszeit 5 Min.</strong> Änderbar in /etc/php5/apache2/php.ini (max_execution_time)
@@ -43,7 +46,7 @@
 
 @section('form')
 
-
+<!--
 <script>
     function show(id) { 
     if(document.getElementById) { 
@@ -54,7 +57,7 @@
         }    
     } 
 }
-</script>
+</script> -->
 
 <form action="/simulate" method="POST" role="form">
     {{ csrf_field() }}
@@ -201,23 +204,26 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="p_name" onchange="javascript:show('produktnamen'); return false" type="checkbox"/>
-                        <i>Name</i>
+                        <input checked="" name="p_name" type="checkbox"/>
+                        Name
                     </label>
                 </div>
-                <div class="form-group" id="produktnamen" style="display: none">
+                <!--onchange="javascript:show('produktnamen'); return false"-->
+<!--                <div class="form-group" id="produktnamen" style="display: none">
                     <label for="Anzahl">
                         Custom-Produktnamen:
                     </label>
                     <textarea class="form-control" cols="20" name="p_name_custom" rows="4">
                     </textarea>
-                </div>
+                </div>-->
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="p_price" onchange="javascript:show('preis'); return false" type="checkbox"/>
-                        <i>Preis</i>
+                        <input checked="" name="p_price"  type="checkbox"/>
+                        Preis
                     </label>
                 </div>
+
+<!--                onchange="javascript:show('preis'); return false"
                 <div id="preis" style="display: none">
                   <div class="form-group col-xs-6">
                       <label for="min_price">
@@ -231,7 +237,7 @@
                       </label>
                       <input class="form-control" id="max_price" name="p_price_custom_max" type="number"/>
                   </div>
-                </div>
+                </div> -->
                 <div class="checkbox">
                     <label>
                         <input checked="" name="p_producer" type="checkbox"/>
@@ -240,30 +246,33 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="p_description" onchange="javascript:show('beschreibung'); return false" type="checkbox"/>
-                        <i>Beschreibung</i>
+                        <input checked="" name="p_description"  type="checkbox"/>
+                        Beschreibung
                     </label>
                 </div>
+ <!--               onchange="javascript:show('beschreibung'); return false"
                 <div class="form-group" id="beschreibung" style="display: none">
                     <label for="Anzahl">
                         Custom-Beschreibungen:
                     </label>
                     <textarea class="form-control" cols="20" name="p_name_custom" rows="4">
                     </textarea>
-                </div>
+                </div> -->
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="p_tax" onchange="javascript:show('steuer'); return false" type="checkbox"/>
-                        <i>Steuersatz</i>
+                        <input checked="" name="p_tax"  type="checkbox"/>
+                        Steuersatz
                     </label>
                 </div>
+
+<!--                onchange="javascript:show('steuer'); return false"
                 <div class="form-group" id="steuer" style="display: none">
                     <label for="Anzahl">
                         Custom-Steuersätze:
                     </label>
                     <textarea class="form-control" cols="20" name="p_name_custom" rows="4">
                     </textarea>
-                </div>
+                </div>-->
 
 
 
@@ -357,7 +366,25 @@
             </div>
         </div>
 
-
+            <div class="checkbox">
+                <label>
+                    <input name="check_faultyData" type="checkbox"/>
+                        <b>Fehlerhafte Daten integrieren. </b>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="only_null" type="checkbox"/>
+                        <b>nur NULL Werte als Fehler</b>
+                </label>
+            </div>
+            <div class="form-group">
+                    <label for="Anzahl">
+                        Wahrscheinlichkeit für fehlerhafte Daten.
+                    </label>
+                    <input class="form-control" id="Anzahl" name="prob_faultyData" value=10 type="number" step="0.01"/>
+                </div>
+            
 
         <!-- row -->
         <div class="row">

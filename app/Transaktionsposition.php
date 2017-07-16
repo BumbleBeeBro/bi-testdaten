@@ -30,7 +30,7 @@ class Transaktionsposition extends Model
 
         $this->save();
 
-        return 'Transaktionsposition ' . $this->id . ' created';
+        return 'Transaktionsposition ' . $this->id . ' erstellt';
     }
 
     public function calculate_price() {

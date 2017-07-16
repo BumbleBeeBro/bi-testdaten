@@ -17,7 +17,7 @@ class CreateHerstellersTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable(); 
             $table->string('email')->nullable(); 
-            $table->string('adress')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

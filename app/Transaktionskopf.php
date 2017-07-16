@@ -25,9 +25,11 @@ class Transaktionskopf extends Model
         //letzer erstellter Kunde
         $this->kunde_id = Kunde::orderBy('id', 'desc')->get()->first()->id;
     
-        $this->store_id = Store::inRandomOrder()->get()->first()->id;
+        $store = Store::inRandomOrder()->get()->first();
 
-        $this->mitarbeiter_id = Mitarbeiter::inRandomOrder()->get()->first()->id;
+        $this->store_id = $store->id;
+
+        $this->mitarbeiter_id = $store->mitarbeiter()->inRandomOrder()->get()->first()->id;
 
         //es können unix zeiten übergeben werden 
         //https://stackoverflow.com/questions/31076792/how-to-get-future-date-in-faker
@@ -35,7 +37,7 @@ class Transaktionskopf extends Model
 
         $this->save();
 
-        return 'Transaktionskopf ' . $this->id . ' created';
+        return '    Transaktionskopf ' . $this->id . ' erstellt';
     }
 
 

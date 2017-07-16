@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
-    protected $fillable = ['adress', 'phoneNumber','email', 'website'];
+    protected $fillable = ['address', 'phoneNumber','email', 'website'];
 
     /**
      * Generiert einen Store mit zufaelligen Parametern.
@@ -19,8 +19,8 @@ class Store extends Model
 
     	$create_array = null;
 
-		if ($store_input['s_adress']) {
-			$this->adress = $faker->address;
+		if ($store_input['s_address']) {
+			$this->address = $faker->address;
 		}
 
 		if ($store_input['s_phoneNumber']) {
@@ -38,6 +38,10 @@ class Store extends Model
 		//Speichert in DB.
 		$this->save();
 
-		return ' Store: ' . $this->id . ' created';
+		return ' Store: ' . $this->id . ' erstellt';
+	}
+
+	public function mitarbeiter() {
+		return $this->hasMany('\App\Mitarbeiter', 'store_id');
 	}
 }

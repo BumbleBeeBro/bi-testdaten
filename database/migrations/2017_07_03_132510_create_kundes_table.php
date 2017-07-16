@@ -18,7 +18,7 @@ class CreateKundesTable extends Migration
             $table->string('name')->nullable();
             $table->string('firstName')->nullable();
             //address ist noch falsch geschrieben ^^
-            $table->string('adress')->nullable();
+            $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->string('phoneNumber')->nullable();
             $table->date('birthDate')->nullable();

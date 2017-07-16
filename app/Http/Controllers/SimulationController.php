@@ -30,20 +30,32 @@ class SimulationController extends Controller
             's_amount' => 'required|integer',
             'm_amount' => 'required|min:'.$request->s_amount.'|integer',
             't_min_date' => 'required|max:'.$request->t_max_date.'|date',
-            't_max_date' => 'required|date|after:t_min_date'
+            't_max_date' => 'required|date|after:t_min_date',
+            'prob_faultyData' => 'nullable|integer|min:0|max:100'
 
             ]);
 
         $faker = \Faker\Factory::create();
 
+        echo '
+        <form action="/results/show" method="GET" role="form">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button class="btn btn-info btn-block" type="submit">
+                        Zu den Ergebnissen
+                    </button>
+                </div>
+            </div>
+        </form>';
+
         //https://laravel.com/docs/5.4/errors#logging
-        Log::info('truncate all tables...');
+        echo 'truncate all tables... <br />';
 
         //leere alle Tabellen
         $this->truncate();
 
         //erstelle Stores
-        $store_input = $this->get_input(['s_adress', 's_phoneNumber', 's_email', 's_website'], $request);
+        $store_input = $this->get_input(['s_address', 's_phoneNumber', 's_email', 's_website'], $request);
 
         for ($i=0; $i < $request->s_amount; $i++) { 
 
@@ -51,7 +63,7 @@ class SimulationController extends Controller
 
             $result = $store->generate($store_input);
 
-            Log::info($result);
+            echo $result . '<br />';
 
         }
 
@@ -66,12 +78,12 @@ class SimulationController extends Controller
 
             $result = $employee->generate($employee_input);
 
-            Log::info($result);
+            echo $result . '<br />';
 
         }
 
         //erstelle Herteller
-        $producer_input = $this->get_input(['h_name', 'h_email', 'h_adress'], $request);
+        $producer_input = $this->get_input(['h_name', 'h_email', 'h_address'], $request);
 
         for ($i=0; $i < $request->h_amount; $i++) {
 
@@ -79,7 +91,7 @@ class SimulationController extends Controller
 
             $result = $producer->generate($producer_input);
 
-            Log::info($result);
+            echo $result . '<br />';
 
         }
 
@@ -92,12 +104,12 @@ class SimulationController extends Controller
 
             $result = $product->generate($product_input);
 
-            Log::info($result);
+            echo $result . '<br />';
 
         }
 
         //starte Transaktionsgenerierung
-        $customer_input = $this->get_input(['k_name', 'k_firstName', 'k_adress', 'k_email', 'k_phoneNumber', 'k_birthDate'], $request);
+        $customer_input = $this->get_input(['k_name', 'k_firstName', 'k_address', 'k_email', 'k_phoneNumber', 'k_birthDate'], $request);
 
         $transactionHead_input = $this->get_input(['t_shipping', 't_discount', 't_paymentMethod'], $request);
 
@@ -114,13 +126,13 @@ class SimulationController extends Controller
         for ($i=0; $i < $request->k_amount; $i++) {
 
             //Hier Eher: 'Starte Erstellung einer Transaktion und dazugehörigen Kunden' oder nicht?
-            Log::info('Starte Erstellung eines Kunden und dazugehörigen Kunden');
+            echo '<br /> Starte Erstellung eines Kunden und dazugehörigen Kunden <br />';
 
             $kunde = Kunde::create();
 
             $result = $kunde->generate($customer_input);
 
-            Log::info($result);
+            echo $result . '<br />';
 
             for ($j=0; $j < $faker->numberBetween($min = 1, $max = 10); $j++) { 
 
@@ -128,7 +140,7 @@ class SimulationController extends Controller
 
                 $result = $transactionHead->generate($transactionHead_input);
 
-                Log::info($result);
+                echo $result . '<br />';
 
                 for ($k=0; $k < $faker->numberBetween($min = 1, $max = 10); $k++) { 
                     $transactionPostion = Transaktionsposition::create();
@@ -137,40 +149,37 @@ class SimulationController extends Controller
 
                     $transactionPostion->calculate_price();
 
-                    Log::info($result);
+                    echo $result . '<br />';
                 }
 
             }
 
         }
 
+        if (request('check_faultyData') !== null) {
+
+            $prob_faultyData = floatval(request('prob_faultyData'));
+
+            $only_null = request('only_null');
+
+            $this->generateFaultyData($models = Hersteller::all(), $only_null, $prob_faultyData);
+
+            $this->generateFaultyData($models = Kunde::all(), $only_null, $prob_faultyData);
+
+            $this->generateFaultyData($models = Mitarbeiter::all(), $only_null, $prob_faultyData);
+
+            $this->generateFaultyData($models = Produkt::all(), $only_null, $prob_faultyData);
+
+            $this->generateFaultyData($models = Store::all(), $only_null, $prob_faultyData);
+
+        }
+
         $this->save_results();
 
-        return redirect('/results/show');
+
+        //return redirect('/results/show');
 
 
-    }
-
-
-    public function calculateTimeDiff($year) {
-
-        /*if ($year == date("Y")) {
-        
-            return 'now';
-    
-        }*/
-        if ($year <= date("Y")) {
-        
-            $res = $year - date("Y");
-             return $res.' years';
-    
-         }
-         if ($year > date("Y")) {
-        
-            $res = $year - date("Y");
-            return '+'.$res.' years';
-    
-        }
     }
 
     public function results() {
@@ -209,7 +218,7 @@ class SimulationController extends Controller
         Transaktionskopf::truncate();
         Transaktionsposition::truncate();
 
-        Log::info('... success <br />');
+        echo '... success <br />';
 
     }
 
@@ -262,4 +271,64 @@ class SimulationController extends Controller
         fwrite($result_json, json_encode($result));
     }
 
+    public function generateFaultyData(\Illuminate\Database\Eloquent\Collection $models, $only_null, $prob_faultyData) {
+
+        // use the factory to create a Faker\Generator instance
+        $faker = \Faker\Factory::create();
+
+        
+
+        //$attributes = $this->getAttributes();
+        foreach ($models as $model) {
+            //https://stackoverflow.com/questions/33512184/get-laravel-models-with-all-attributes
+            $columns = $model->getFillable();
+        
+            foreach ($columns as $column) {
+
+                //bestimme wie häufig daten geändert werden sollen.
+                if ($faker->boolean($chanceOfGettingTrue = $prob_faultyData)) {
+
+                    if($only_null) {
+                        $model->$column = null;
+
+                        $model->save();
+
+                        echo 'Attribut ' . $column . ' null gesetzt <br />';
+
+                    }
+                    else {
+                        //$type = gettype($model->$column);
+                        //https://stackoverflow.com/questions/18562684/how-to-get-database-field-type-in-laravel
+                        //https://laracasts.com/discuss/channels/laravel/pdomysql-driver-not-found
+                        $type = \DB::connection()->getDoctrineColumn($model->getTable(), $column)->getType()->getName();
+
+                        echo $type;
+
+                         if($type == 'string') {
+                            $model->$column = 'ERROR';
+
+                            $model->save();
+
+                            echo 'Attribut ' . $column . ' ERROR gesetzt <br />';
+
+                        } elseif($type == 'integer') {
+                            $model->$column = 0;
+
+                            $model->save();
+
+                            echo 'Attribut ' . $column . ' 0 gesetzt <br />';
+
+                        } elseif($type == 'date') {
+                            $model->$column = date('Y-m-d H:i:s', strtotime('01.01.1970'));;
+
+                            $model->save();
+
+                            echo 'Attribut ' . $column . ' auf 01/01/1970 gesetzt <br />';
+
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
