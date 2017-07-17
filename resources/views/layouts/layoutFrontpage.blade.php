@@ -7,7 +7,7 @@
         <meta content="" name="author"/>
         <link href="../favicon.png" rel="icon"/>
         <title>
-            exumble.de
+            consulting-mh
         </title>
         <!-- Bootstrap core CSS -->
         <!-- Latest compiled and minified CSS -->

@@ -309,7 +309,15 @@ class SimulationController extends Controller
                         //https://laracasts.com/discuss/channels/laravel/pdomysql-driver-not-found
                         $type = \DB::connection()->getDoctrineColumn($model->getTable(), $column)->getType()->getName();
 
-                         if($type == 'string') {
+                         if ($faker->boolean($chanceOfGettingTrue = 30)) {
+
+                             $model->$column = null;
+
+                             $model->save();
+
+                            echo 'Attribut ' . $column . ' auf null gesetzt <br />';
+
+                         } elseif($type == 'string') {
                             $model->$column = 'ERROR';
 
                             $model->save();
