@@ -273,7 +273,7 @@ class SimulationController extends Controller
 
                 ]);
         }
-        $result_json = fopen('results/result' . \Carbon\Carbon::now()->format('Y-m-d_h-i-s') . '.json', 'w');
+        $result_json = fopen('results/result' . \Carbon\Carbon::now('Europe/Berlin')->format('Y-m-d_h-i-s') . '.json', 'w');
 
         fwrite($result_json, json_encode($result));
     }
