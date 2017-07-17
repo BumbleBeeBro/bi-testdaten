@@ -10,16 +10,18 @@
             <hr />
             <div class="form-group">
                 <p> 
-                    Mit diesem Tool können zufällige BI-Testdaten generiert werden. 
-                </p>
-                <p> 
-                    Außerdem kann hier ein Beispieltext stehen. 
+                    Mit diesem Tool können <strong>zufällige BI-Testdaten</strong> generiert werden. Die erstellten Daten eignen sich beispielsweise zum Testen eines <strong>einer Data-Warehouse Architektur für den Einzelhandel</strong> oder zur <strong>Schulung von Mitarbeitern</strong>. Je nach Wunsch können dabei Daten für die Dimensionen Kunde, Store, Mitarbeiter, Produkte und Hersteller mit entsprechenden Attributen erstellt werden. Die Testdaten können anschließend im <strong>JSON-Format</strong> heruntergeladen werden.
+                     
                 </p>
             </div>
             <div class="form-group">
                 <p> 
-                    Einige Attribute (kursiv) können auch mit eigenen Werten befüllt werden. Dazu muss zunächst das Feld <strong>"Benutzerspezifische Werte verwenden."</strong> ausgwählt werden. Durch Entfernen des Hakens bei bestimmten Attributen können anschließend benutzerspezifische Werte eingetragen und verwendet werden. 
+                    Bitte wählen Sie zunächst die <strong>gewünschten Attribute</strong> mithilfe der Checkboxen aus. Anschließend muss die jeweilige <strong>Anzahl</strong> von <strong>Kunden, Stores, Mitarbeitern, Produkten und Herstellern</strong> festgelegt werden. Die <strong>Hersteller</strong> werden allerdings nur erstellt, wenn unter der Kategorie <strong>Produkte</strong> dieses als Attribut ausgewählt worden ist. In der Kategorie <strong>Transaktionsdaten</strong> kann zusätzlich festgelegt werden, ob mehrere Produkte pro Position verwendet werden sollen. Der <strong>Nettopreis</strong> pro Position kann nur berechnet werden, wenn der Preis und der Steuersatz des Produktes, sowie der Rabatt bei der Transaktion ausgewählt ist. Die <strong>Anzahl der Transaktionen</strong> wird durch die <strong>Kundenanzahl</strong> geregelt.
                 </p>
+                <p>
+                    Abschließend kann festgelegt werden, ob die zu erstellenden Daten <strong>fehlerhafte Daten</strong> beinhalten sollen. Neben dem Anteil der fehlerhaften Daten kann zudem festgelegt werden, ob diese nur als <strong>NULL-Werte</strong> erstellt werden sollen oder ob zudem <strong>datentypspezifische Fehlerdaten</strong> erstellt werden sollen.
+                </p>
+
             </div>
   <!--          <div class="checkbox">
                 <label>
@@ -33,9 +35,6 @@
             <div class="alert alert-warning">
                 <p> 
                     <strong>Maximale Ausführungszeit 5 Min.</strong> Änderbar in /etc/php5/apache2/php.ini (max_execution_time)
-                </p>
-                <p> 
-                    Die Felder <strong>"Startdatum"</strong> und <strong>"Enddatum"</strong> sind nicht mit Mozilla Firefox kompatibel. Stattdessen müssen die Daten manuell im Format <strong>"jjjj-mm-tt"</strong> eingegegeben werden.
                 </p>
             </div>
             <hr/>
@@ -92,7 +91,7 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="k_adress" type="checkbox"/>
+                        <input checked="" name="k_address" type="checkbox"/>
                         Adresse
                     </label>
                 </div>
@@ -133,7 +132,7 @@
                 <div class="checkbox">
                     <label>
                         <!-- address ist falsch geschrieben -->
-                        <input checked="" name="s_adress" type="checkbox"/>
+                        <input checked="" name="s_address" type="checkbox"/>
                         Adresse
                     </label>
                 </div>
@@ -305,7 +304,7 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input checked="" name="h_adress" type="checkbox"/>
+                        <input checked="" name="h_address" type="checkbox"/>
                         Adresse
                     </label>
                 </div>
@@ -352,6 +351,18 @@
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="Anzahl">
+                        Max. Transaktionen pro Kunde:
+                    </label>
+                    <input class="form-control" name="max_trans_pro_k" value="10" required type="number"/>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="Anzahl">
+                        Max. Positionen pro Transaktion:
+                    </label>
+                    <input class="form-control" name="max_pos_pro_trans" value="10" required type="number"/>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="Anzahl">
                         Startdatum:
                     </label>
                     <input class="form-control" name="t_min_date" value="2007-01-01" required type="date"/>
@@ -380,7 +391,7 @@
             </div>
             <div class="form-group">
                     <label for="Anzahl">
-                        Wahrscheinlichkeit für fehlerhafte Daten.
+                        Wahrscheinlichkeit für fehlerhafte Daten. Angabe in Prozent (%).
                     </label>
                     <input class="form-control" id="Anzahl" name="prob_faultyData" value=10 type="number" step="0.01"/>
                 </div>

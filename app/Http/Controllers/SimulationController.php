@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 use App\Kunde;
 use App\Mitarbeiter;
 use App\Store;
@@ -31,12 +32,16 @@ class SimulationController extends Controller
             'm_amount' => 'required|min:'.$request->s_amount.'|integer',
             't_min_date' => 'required|max:'.$request->t_max_date.'|date',
             't_max_date' => 'required|date|after:t_min_date',
-            'prob_faultyData' => 'nullable|integer|min:0|max:100'
+            'prob_faultyData' => 'nullable|integer|min:0|max:100',
+            'max_trans_pro_k' => 'required|integer',
+            'max_pos_pro_trans' => 'required|integer'
 
             ]);
 
         $faker = \Faker\Factory::create();
 
+
+        echo 'Start: ' . Carbon::now('Europe/Berlin');
         echo '
         <form action="/results/show" method="GET" role="form">
             <div class="col-md-12">
@@ -126,7 +131,7 @@ class SimulationController extends Controller
         for ($i=0; $i < $request->k_amount; $i++) {
 
             //Hier Eher: 'Starte Erstellung einer Transaktion und dazugehörigen Kunden' oder nicht?
-            echo '<br /> Starte Erstellung eines Kunden und dazugehörigen Kunden <br />';
+            echo '<br /> Starte Erstellung eines Kunden und dazugehörigen Transaktionen <br />';
 
             $kunde = Kunde::create();
 
@@ -134,7 +139,7 @@ class SimulationController extends Controller
 
             echo $result . '<br />';
 
-            for ($j=0; $j < $faker->numberBetween($min = 1, $max = 10); $j++) { 
+            for ($j=0; $j < $faker->numberBetween($min = 1, $max = $request->max_trans_pro_k); $j++) { 
 
                 $transactionHead = Transaktionskopf::create();
 
@@ -142,7 +147,7 @@ class SimulationController extends Controller
 
                 echo $result . '<br />';
 
-                for ($k=0; $k < $faker->numberBetween($min = 1, $max = 10); $k++) { 
+                for ($k=0; $k < $faker->numberBetween($min = 1, $max = $request->max_pos_pro_trans); $k++) { 
                     $transactionPostion = Transaktionsposition::create();
 
                     $result = $transactionPostion->generate($transactionPosition_input);
@@ -175,6 +180,8 @@ class SimulationController extends Controller
         }
 
         $this->save_results();
+
+        echo 'Stop: ' . Carbon::now('Europe/Berlin');
 
 
         //return redirect('/results/show');
@@ -302,21 +309,19 @@ class SimulationController extends Controller
                         //https://laracasts.com/discuss/channels/laravel/pdomysql-driver-not-found
                         $type = \DB::connection()->getDoctrineColumn($model->getTable(), $column)->getType()->getName();
 
-                        echo $type;
-
                          if($type == 'string') {
                             $model->$column = 'ERROR';
 
                             $model->save();
 
-                            echo 'Attribut ' . $column . ' ERROR gesetzt <br />';
+                            echo 'Attribut ' . $column . ' auf "ERROR" gesetzt <br />';
 
                         } elseif($type == 'integer') {
                             $model->$column = 0;
 
                             $model->save();
 
-                            echo 'Attribut ' . $column . ' 0 gesetzt <br />';
+                            echo 'Attribut ' . $column . ' auf 0 gesetzt <br />';
 
                         } elseif($type == 'date') {
                             $model->$column = date('Y-m-d H:i:s', strtotime('01.01.1970'));;
