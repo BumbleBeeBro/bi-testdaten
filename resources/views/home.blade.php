@@ -350,28 +350,28 @@
                     </label>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="Anzahl">
+                    <label for="max_trans_pro_k">
                         Max. Transaktionen pro Kunde:
                     </label>
-                    <input class="form-control" name="max_trans_pro_k" value="10" required type="number"/>
+                    <input id="max_trans_pro_k" class="form-control" name="max_trans_pro_k" value="10" required type="number"/>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="Anzahl">
+                    <label for="max_pos_pro_trans">
                         Max. Positionen pro Transaktion:
                     </label>
-                    <input class="form-control" name="max_pos_pro_trans" value="10" required type="number"/>
+                    <input id="max_pos_pro_trans" class="form-control" name="max_pos_pro_trans" value="10" required type="number"/>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="Anzahl">
+                    <label for="t_min_date">
                         Startdatum:
                     </label>
-                    <input class="form-control" name="t_min_date" value="2007-01-01" required type="date"/>
+                    <input class="form-control" id="t_min_date" name="t_min_date" value="2007-01-01" required type="date"/>
                 </div>
                 <div class="form-group col-xs-6">
-                    <label for="Anzahl">
+                    <label for="t_max_date">
                         Enddatum:
                     </label>
-                    <input class="form-control" name="t_max_date" value=2017-01-01 required type="date"/>
+                    <input id="t_max_date" class="form-control" name="t_max_date" value=2017-01-01 required type="date"/>
                 </div>
                 <hr/>
             </div>
