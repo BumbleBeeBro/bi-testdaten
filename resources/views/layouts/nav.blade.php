@@ -46,19 +46,19 @@
                         </span>
                     </a>
                 </li>
-{{--                 <!-- Kontakt -->
-                @if(Request::url() === Request::root() . '/contact')
+                <!-- Kontakt -->
+                @if(Request::url() === Request::root() . '/dwh-operations' || Request::url() === Request::root() . '/Mitarbeiter/products_sold' || Request::url() === Request::root() . '/Produkte/total_sales')
                 <li class="active">
                 @else
                 <li>
                 @endif
-                    <a href="/contact">
-                        Contact
+                    <a href="/dwh-operations">
+                        DWH-Operationen
                         <span class="sr-only">
                             (current)
                         </span>
                     </a>
-                </li> --}}
+                </li>
                 <!-- Impressum -->
                 @if(Request::url() === Request::root() . '/imprint')
                 <li class="active">

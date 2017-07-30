@@ -1,11 +1,14 @@
 <?php
 
-namespace App;
+namespace bi_testdaten;
 
 use Illuminate\Database\Eloquent\Model;
-use \App\Transaktion;
-use \App\Hersteller;
+use \bi_testdaten\Transaktion;
+use \bi_testdaten\Hersteller;
 
+/**
+ * Verwaltet die Erstellung eines Produkts.
+ */
 class Produkt extends Model
 {
    
@@ -21,6 +24,11 @@ class Produkt extends Model
     $product_input['p_tax_custom'] array mit float Werten für Steuersätze.
     Wenn die custom Optionen nicht angegeben werden, werden die Attribute mit zufälligen werten gefüllt. 
     */
+   /**
+    * Erstellung eines Produkts mit angegbenen Attributen.
+    * @param  Array of Boolean $product_input -> Zu erstellende Attribute.
+    * @return Logoutput.
+    */
     public function generate($product_input){
 
     	$faker = \Faker\Factory::create();
@@ -32,8 +40,7 @@ class Produkt extends Model
 
 		}
 
-		//kann man dann hier nicht auch einen selbst gesetzten Preis nehmen?
-		//zufaelligen preis ermitteln. Min & Max kann selbst gestzt werden.
+		//Preis setzen.
 		if ($product_input['p_price']) {
 
 			$this->price = $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 1000);
@@ -65,26 +72,11 @@ class Produkt extends Model
 
 		
 
-		//http://php.net/manual/de/function.memory-get-usage.php
-		//Log::info(memory_get_usage());
+		/*//http://php.net/manual/de/function.memory-get-usage.php
+		//Log::info(memory_get_usage());*/
 
 		return 	' Produkt: ' . $this->id . ' erstellt';
 
-	}
-
-	//foreach geht glaube ich nicht auf collections.
-	/**
-	 * Berechnet die gesamten Verkaeufe ueber alle Transaktionen des Produkts.
-	 * @return Integer
-	 */
-	public function total_sales() {
-		$total_sales = 0;
-
-		foreach ($this->transactions() as $transaction) {
-
-			$total_sales += $transaction->net_price;
-		}
-		return $total_sales;
 	}
 
 	/**
@@ -93,7 +85,7 @@ class Produkt extends Model
 	 */
 	public function transactions() {
 		//Gibt die Funktion auch mehrere Transaktionen wieder?
-    	return Transaktion::where('produkt_id', $this->id)->get();
+    	return $this->hasMany('\bi_testdaten\Transaktionsposition', 'produkt_id')->get();
     }
 
 

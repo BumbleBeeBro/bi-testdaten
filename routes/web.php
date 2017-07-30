@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
+Route::get('/', 'HomeController@home');
 
 Route::post('/simulate', 'SimulationController@simulate');
 
@@ -32,14 +29,12 @@ Route::get('/test', 'TestController@test');
 
 Route::get('/truncate', 'TestController@truncate');
 
-Route::get('/results/show', 'SimulationController@results');
+Route::get('/results/show', 'ResultController@results');
 
-Route::get('/results/{name}', 'SimulationController@result');
+Route::post('/results/delete', 'ResultController@delete');
 
-Route::get('/dwh-operations', 'SimulationController@dwh_operations');
+Route::get('/dwh-operations', 'DWHController@home');
 
-Route::get('/Mitarbeiter/{Mitarbeiter}/products_sold', 'MitarbeiterController@products_sold');
+Route::post('/Mitarbeiter/products_sold', 'DWHController@products_sold');
 
-Route::get('/Produkte/{Produkt}/total_sales', 'ProduktController@total_sales');
-
-Route::post('/results/delete', 'SimulationController@delete');
+Route::post('Produkte/total_sales', 'DWHController@total_sales');

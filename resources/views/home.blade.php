@@ -131,7 +131,12 @@
                 </div>
                 <div class="checkbox">
                     <label>
-                        <!-- address ist falsch geschrieben -->
+                        <input checked="" name="s_employees" type="checkbox"/>
+                        <b>Mitarbeiter erstellen</b>
+                    </label>
+                </div>                
+                <div class="checkbox">
+                    <label>
                         <input checked="" name="s_address" type="checkbox"/>
                         Adresse
                     </label>
@@ -240,7 +245,7 @@
                 <div class="checkbox">
                     <label>
                         <input checked="" name="p_producer" type="checkbox"/>
-                        Hersteller
+                        <b>Hersteller</b>
                     </label>
                 </div>
                 <div class="checkbox">
@@ -289,6 +294,20 @@
                         Anzahl an zu erstellenden Herstellern.
                     </label>
                     <input class="form-control" id="Anzahl" name="h_amount" value=10 required type="number"/>
+                </div>
+                <div class="form-group">
+                    <label for="Sprache">
+                        Herkunft der zu erstellenden Hersteller
+                    </label>
+                    <select class="form-control" list="Sprachen" name="h_language"> 
+                        @foreach($languages as $language)
+                                @if($language == 'en_US')
+                                    <option selected="selected"> {{$language}} </option>
+                                @else
+                                    <option> {{$language}} </option>
+                                @endif
+                        @endforeach   
+                    </select>
                 </div>
                 <div class="checkbox">
                     <label>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace bi_testdaten;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,11 +11,11 @@ class Hersteller extends Model
 
     public function generate($producer_input){
 
-    	$faker = \Faker\Factory::create();
+    	$faker = \Faker\Factory::create($producer_input['language']);
 
     	//Namen setzen.
 		if ($producer_input['h_name']) {
-			$this->name = $faker->word;
+			$this->name = $faker->company;
 		}
 
 		if ($producer_input['h_address']) {

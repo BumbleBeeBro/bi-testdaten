@@ -1,60 +1,67 @@
 <?php
 
-namespace App;
+namespace bi_testdaten;
 
 use Illuminate\Database\Eloquent\Model;
-use \App\Store;
+use \bi_testdaten\Store;
 
+/**
+ * Verwaltet die Generierung der Mitarbeiter entsprechend den ausgewählten Attributen.
+ */
 class Mitarbeiter extends Model
 {
 
-	//Muss "store_id" hier nicht rausgenommen werden?
+	//Befüllbare Attribute.
     protected $fillable = ['name', 'firstName', 'store_id'];
 
-    public function generate($employee_input){
+    /**
+     * @param  Array of Boolean $employee_input -> Zu erstellende Attribute.
+     * @return Logoutput.
+     */
+    public function generate($employee_input, $i){
 
+    	//Faker-Factory erstellen.
     	$faker = \Faker\Factory::create();
 
-    	$create_array = null;
+    	/*$create_array = null;*/
 
+    	//Nachnamen setzen.
 		if ($employee_input['m_name']) {
 			$this->name = $faker->lastName;
 		}
 
+		//Vornamen setzen.
 		if ($employee_input['m_firstName']) {
 			$this->firstName = $faker->firstName($gender = null);
 		}
 
-
-		//Es muss gesichert werden, dass kein Store ohne Mitarbeiter existiert.
-
-		//$this->store_id = $faker->numberBetween($min = 1, $max = Store::orderByDesc('id')->get()->first()->id);
-
+		//Ermittlere die ID des zuletzt hinzugefügten Stores.
 		$max_store_id = Store::orderByDesc('id')->get()->first()->id;
 
-		if ($this->id > $max_store_id) {
+		//Prüfen, ob jeder Store bereits belegt ist.
+		if ($i > $max_store_id) {
 
+			//Weise dem zu erstellenden Mitarbeiter eine zufällige Store-ID zu.
 			$this->store_id = $faker->numberBetween($min = 1, $max = $max_store_id);
 
+		} else{
+
+			//Weise dem zus erstellenden Mitarbeiter die ID des zuletzt erstellten Stores zu.
+			$this->store_id = $i;
+
 		}
-		else{
 
-			$this->store_id = $this->id;
-
-		}
-
+		//Ergebnisse in DB speichern.
 		$this->save();
 
 		return ' Mitarbeiter: ' . $this->id . ' erstellt';
 	}
 
-
-    public function products_sold() {    	
-    	return $this->transactions()->count();
-    }
-
+    /** 
+     * Gibt die Transaktionsköpfe wieder, an denen der Mitarbeiter beteiligt war.
+     * @return Transaktionsköpfe des Mitarbeiters.
+     */
     public function transactions() {
-
-    	return $this->hasMany('\App\Transaktionskopf', 'mitarbeiter_id')->get();
+    	return $this->hasMany('\bi_testdaten\Transaktionskopf', 'mitarbeiter_id')->get();
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace bi_testdaten;
 
 use Illuminate\Database\Eloquent\Model;
-use \App\Transaktionskopf;
+use \bi_testdaten\Transaktionskopf;
 
 class Transaktionsposition extends Model
 {
@@ -35,12 +35,11 @@ class Transaktionsposition extends Model
 
     public function calculate_price() {
 
-    	$price = $this->product()->price;
+    	//muss nicht mit einem try und catch statement umklammert werden , da null Einträge für PHP bei Rechenoperationen als 0 angesehen werden
+        $price = $this->product()->price;
     	$tax = $this->product()->tax;
     	$discount = $this->discount;
     	$amount = $this->amount;
-
-    	//dd([$price, $tax, $discount]);
 
     	$this->net_price = ($price * $discount) * (1 + $tax) * $amount; 
 
@@ -54,7 +53,7 @@ class Transaktionsposition extends Model
      * @return Produkt, welches von der Transaktion verwendet wird.
      */
     public function product() {
-    	return $this->belongsTo('\App\Produkt', 'produkt_id')->get()->first();
+    	return $this->belongsTo('\bi_testdaten\Produkt', 'produkt_id')->get()->first();
     }
 
 }
