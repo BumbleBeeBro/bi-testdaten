@@ -15,7 +15,7 @@ class Kunde extends Model
 	/** 
 	 * Erstellung eines Kunden mit ausgewählten Attributen.
 	 * @param  Array of Boolean $customer_input -> Array der zu erstellenden Attribute.
-	 * @return Logoutput.
+	 * @return String, Logoutput
 	 */
 	public function generate($customer_input) {
 

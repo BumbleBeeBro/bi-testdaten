@@ -31,7 +31,7 @@ class DWHController extends Controller
 			return redirect('/dwh-operations')->withErrors('Mitarbeiter existiert nicht!');
 		}
 
-    	$products_sold = null;
+    	$products_sold = 0;
 
     	foreach ($employee->transactions() as $transactionhead) {
     		foreach ($transactionhead->transactionbodies() as $body) {
@@ -57,7 +57,7 @@ class DWHController extends Controller
 			return redirect('/dwh-operations')->withErrors('Produkt existiert nicht!');
 		}
 
-		$total_sales = null;
+		$total_sales = 0;
 
 		foreach ($product->transactions() as $body) {
 

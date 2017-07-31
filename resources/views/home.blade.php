@@ -34,7 +34,7 @@
             </div>-->
             <div class="alert alert-warning">
                 <p> 
-                    <strong>Maximale Ausführungszeit 5 Min.</strong> Änderbar in /etc/php5/apache2/php.ini (max_execution_time)
+                    <strong>Maximale Ausführungszeit 2 Stunden. </strong>
                 </p>
             </div>
             <hr/>

@@ -26,9 +26,6 @@ class ResultController extends Controller
      * @return Redirection, die die Route '/results/show' auslöst.
      */
     public function delete() {
-    	
-        /*//http://php.net/manual/de/function.glob.php
-    	//https://stackoverflow.com/questions/4594180/deleting-all-files-from-a-folder-using-php*/
 
     	$results = glob('results/*');
 

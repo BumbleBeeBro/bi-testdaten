@@ -22,7 +22,7 @@ class SimulationController extends Controller
 
     /**
      * Leitet den Simulationsprozess, indem die Funktion die Models erstellt und die Zufallsdatengenerierung anstößt. Eingegebene Daten werden validiert. Zudem wird die Erstellung von Fehlerdaten eingeleitet. 
-     * @param  Request $request -> Formulardaten, die die Spezifikationen des Benutzers festelegen.
+     * @param  Request $request -> Formulardaten, die die Spezifikationen des Benutzers beinhalten.
      */
     public function simulate(Request $request) {
         
@@ -46,7 +46,7 @@ class SimulationController extends Controller
         //erstelle Faker-Factory
         $faker = \Faker\Factory::create();
 
-        //https://laravel.com/docs/5.4/errors#logging
+        //logging
         Log::info('truncate all tables...');
 
         //leere alle Tabellen
@@ -119,7 +119,7 @@ class SimulationController extends Controller
 
         $transactionHead_input = $this->get_input(['t_shipping', 't_discount', 't_paymentMethod','s_employees'], $request);
 
-        //veränder dates in unix codierung um diese benutzen zu können.
+        //füge zum input das Start- und Enddatum hinzu.
         $transactionHead_input['t_min_date'] = request('t_min_date');
         $transactionHead_input['t_max_date'] = request('t_max_date');
 
@@ -182,7 +182,7 @@ class SimulationController extends Controller
 
         }
 
-        //Ergebnisse speichern.
+        //Ergebnisse als JSON speichern.
         $this->save_results();
 
 
@@ -204,15 +204,15 @@ class SimulationController extends Controller
         Transaktionskopf::truncate();
         Transaktionsposition::truncate();
 
-        Log::info('... success <br />');
+        Log::info('... success');
 
     }
 
     /**
-     * Ermittelt, welche der in einem Array of String angegebenen Checkboxen existieren und interpretiert dies in boolesche Werte (true = ausgewählt).
-     * @param  Array of String $input_array -> Array mit zu überprüfenden Checkboxen.
+     * Ermittelt, welche der in einem Array angegebenen Checkboxen existieren und interpretiert dies in boolesche Werte (true = ausgewählt).
+     * @param  Array $input_array -> Array mit zu überprüfenden Checkboxen.
      * @param  $checkboxes -> Checkboxen, die überprüft werden sollen.
-     * @return Array of Boolean -> Array mit boolscher Angabe, welche Checkboxen gesetzt sind.
+     * @return Array -> Array mit boolscher Angabe, welche Checkboxen gesetzt sind.
      */
     public function get_input($input_array, $checkboxes) {
 
@@ -238,8 +238,6 @@ class SimulationController extends Controller
      * @return Weiterleitung zur letzten Seite inklusive Fehlermeldung, falls ein Fehler auftritt.
      */
     public function save_results() {
-        
-        /*//https://laravel.com/docs/5.4/eloquent-serialization*/
 
         //Lese alle erstellten Daten ein.
         $result = [
@@ -252,13 +250,11 @@ class SimulationController extends Controller
         'Transaktionspositionen' => Transaktionsposition::all()->toArray()
         ];
 
-        /*//http://carbon.nesbot.com/docs/
-        //https://www.w3schools.com/php/php_file_create.asp
         //fopen kann errors erzeugen bei unzureichenden Berechtigungen oder überschreiben*/
 
         //öffne JSON.
         try{
-            $result_json = fopen('results/result' . \Carbon\Carbon::now()->format('Y-m-d_h-i-s') . '.json', 'w');
+            $result_json = fopen('results/result_' . \Carbon\Carbon::now('Europe/Berlin')->format('Y-m-d_h-i-s') . '.json', 'w');
         }
         //Fehlerbehandlung.
         catch(\Exception $e){
@@ -276,11 +272,10 @@ class SimulationController extends Controller
     }
 
     /**
-     * Funktion, um Daten eines Models zu verfälschen. Je nach eingegebener Wahrscheinlichkeit wird bei jedem Datum überprüft, ob es in einen Fehlerwert umgewandelt werden soll Die gewählten Daten werden mit Fehlerwerten überschrieben. Fehlerwerte sind entweder "null" oder "ERROR" für Strings, "0" für Integers, oder "01-01-1970" für Dates.
+     * Funktion, um Daten eines Models zu verfälschen. Je nach eingegebener Wahrscheinlichkeit wird bei jedem Datum überprüft, ob es in einen Fehlerwert umgewandelt werden soll. Die gewählten Daten werden mit Fehlerwerten überschrieben. Fehlerwerte sind entweder "null" oder "ERROR" für Strings, "0" für Integers, oder "01-01-1970" für Dates.
      * @param  Model $models -> Modelinstanzen, wessen Daten verfälscht werden sollen.
      * @param  Boolean $only_null -> Gibt an, ob alle Fehlerdaten den Wert "null" haben sollen.
-     * @param  Integer $prob_faultyData -> Wahrscheinlichkeit, mit der ein Datum einen Fehlerhaften Wert annehmen soll (Integer zwischen 0 und 100).
-     * @return [type]
+     * @param  Integer $prob_faultyData -> Wahrscheinlichkeit, mit der ein Wert fehlerhaft sein soll. (Integer zwischen 0 und 100).
      */
     public function generateFaultyData(\Illuminate\Database\Eloquent\Collection $models, $only_null, $prob_faultyData) {
 
@@ -306,60 +301,60 @@ class SimulationController extends Controller
                 //bestimme wie häufig Daten geändert werden sollen.
                 if ($faker->boolean($chanceOfGettingTrue = $prob_faultyData)) {
 
-                //neue abfrage
-                if($model->$column != null)  {  
+                    //neue abfrage
+                    if($model->$column != null)  {  
 
-                    if($only_null) {
-                        $model->$column = null;
-
-                        $model->save();
-
-                        Log::info('Attribut ' . $column . ' null gesetzt');
-
-                    }
-                    else {
-                        
-                        /*//$type = gettype($model->$column);
-                        //https://stackoverflow.com/questions/18562684/how-to-get-database-field-type-in-laravel
-                        //https://laracasts.com/discuss/channels/laravel/pdomysql-driver-not-found*/
-                        $type = \DB::connection()->getDoctrineColumn($model->getTable(), $column)->getType()->getName();
-
-                        //In 30% der Fälle sollen Fehler 'null' sein.
-                         if ($faker->boolean($chanceOfGettingTrue = 30)) {
-
-                             $model->$column = null;
-
-                             $model->save();
-
-                            Log::info('Attribut ' . $column . ' auf null gesetzt');
-
-                        // Fehlerdatum = 'ERROR', falls der Datentyp String ist.
-                         } elseif($type == 'string') {
-                            $model->$column = 'ERROR';
+                        if($only_null) {
+                            $model->$column = null;
 
                             $model->save();
 
-                            Log::info('Attribut ' . $column . ' auf "ERROR" gesetzt');
-
-                        // Fehlerdatum = '0', falls der Datentyp Integer ist.
-                        } elseif($type == 'integer') {
-                            $model->$column = 0;
-
-                            $model->save();
-
-                            Log::info('Attribut ' . $column . ' auf 0 gesetzt');
-
-                        // Fehlerdatum = '1970-01-01', falls der Datentyp Date ist.
-                        } elseif($type == 'date') {
-                            $model->$column = date('Y-m-d H:i:s', strtotime('01.01.1970'));;
-
-                            $model->save();
-
-                            Log::info('Attribut ' . $column . ' auf 01/01/1970 gesetzt');
+                            Log::info('Attribut ' . $column . ' null gesetzt');
 
                         }
+                        else {
+                            
+                            /*//$type = gettype($model->$column);
+                            //https://stackoverflow.com/questions/18562684/how-to-get-database-field-type-in-laravel
+                            //https://laracasts.com/discuss/channels/laravel/pdomysql-driver-not-found*/
+                            $type = \DB::connection()->getDoctrineColumn($model->getTable(), $column)->getType()->getName();
+
+                            //In 30% der Fälle sollen Fehler 'null' sein.
+                             if ($faker->boolean($chanceOfGettingTrue = 30)) {
+
+                                 $model->$column = null;
+
+                                 $model->save();
+
+                                Log::info('Attribut ' . $column . ' auf null gesetzt');
+
+                            // Fehlerdatum = 'ERROR', falls der Datentyp String ist.
+                             } elseif($type == 'string') {
+                                $model->$column = 'ERROR';
+
+                                $model->save();
+
+                                Log::info('Attribut ' . $column . ' auf "ERROR" gesetzt');
+
+                            // Fehlerdatum = '0', falls der Datentyp Integer ist.
+                            } elseif($type == 'integer') {
+                                $model->$column = 0;
+
+                                $model->save();
+
+                                Log::info('Attribut ' . $column . ' auf 0 gesetzt');
+
+                            // Fehlerdatum = '1970-01-01', falls der Datentyp Date ist.
+                            } elseif($type == 'date') {
+                                $model->$column = date('Y-m-d H:i:s', strtotime('01.01.1970'));;
+
+                                $model->save();
+
+                                Log::info('Attribut ' . $column . ' auf 01/01/1970 gesetzt');
+
+                            }
+                        }
                     }
-                }
                 }
             }
         }

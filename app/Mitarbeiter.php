@@ -16,7 +16,7 @@ class Mitarbeiter extends Model
 
     /**
      * @param  Array of Boolean $employee_input -> Zu erstellende Attribute.
-     * @return Logoutput.
+     * @return String, Logoutput
      */
     public function generate($employee_input, $i){
 

@@ -14,14 +14,12 @@ class Store extends Model
 
     /**
      * Generiert einen Store mit zufaelligen Parametern.
-     * @param  Array of Bool $store_input -> Boolesches Array, welches die zu erstellenden Parameter angibt.
-     * @return String, Erstellnachricht.
+     * @param  Array of Boolean $store_input -> Boolesches Array, welches die zu erstellenden Parameter angibt.
+     * @return String, Logoutput
      */
     public  function generate($store_input) {
 
     	$faker = \Faker\Factory::create();
-
-    	/*$create_array = null;*/
 
     	//Adresse setzen.
 		if ($store_input['s_address']) {
