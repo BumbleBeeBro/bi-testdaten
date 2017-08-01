@@ -338,11 +338,11 @@ class SimulationController extends Controller
 
                             // Fehlerdatum = '0', falls der Datentyp Integer ist.
                             } elseif($type == 'integer') {
-                                $model->$column = 0;
+                                $model->$column = -1;
 
                                 $model->save();
 
-                                Log::info('Attribut ' . $column . ' auf 0 gesetzt');
+                                Log::info('Attribut ' . $column . ' auf -1 gesetzt');
 
                             // Fehlerdatum = '1970-01-01', falls der Datentyp Date ist.
                             } elseif($type == 'date') {
